@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#">
+
+    <owl:Ontology rdf:about=""/>
+
+    <!-- Animal -->
+    <owl:Class rdf:ID="animal">
+        <rdfs:comment>Animals form a class.</rdfs:comment>
+    </owl:Class>
+
+    <!-- Plant -->
+    <owl:Class rdf:ID="plant">
+        <rdfs:comment>
+            Plants form a class disjoint from animals.
+        </rdfs:comment>
+        <owl:disjointWith rdf:resource="#animal"/>
+    </owl:Class>
+
+    <!-- Tree -->
+    <owl:Class rdf:ID="tree">
+        <rdfs:comment>Trees are a type of plant.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#plant"/>
+    </owl:Class>
+
+    <!-- Branch -->
+    <owl:Class rdf:ID="branch">
+        <rdfs:comment>Branches are parts of trees.</rdfs:comment>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#is_part_of"/>
+                <owl:allValuesFrom rdf:resource="#tree"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+    <!-- Leaf -->
+    <owl:Class rdf:ID="leaf">
+        <rdfs:comment>Leaves are parts of branches.</rdfs:comment>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#is_part_of"/>
+                <owl:allValuesFrom rdf:resource="#branch"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+    <!-- Herbivore -->
+    <owl:Class rdf:ID="herbivore">
+        <rdfs:comment>
+            Herbivores are animals that eat plants.
+        </rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#animal"/>
+    </owl:Class>
+
+    <!-- Carnivore -->
+    <owl:Class rdf:ID="carnivore">
+        <rdfs:comment>
+            Carnivores are animals that eat animals.
+        </rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#animal"/>
+    </owl:Class>
+
+    <!-- Giraffe -->
+    <owl:Class rdf:ID="giraffe">
+        <rdfs:comment>
+            Giraffes are herbivores and eat leaves.
+        </rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#herbivore"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#eats"/>
+                <owl:allValuesFrom rdf:resource="#leaf"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+    <!-- Lion -->
+    <owl:Class rdf:ID="lion">
+        <rdfs:comment>
+            Lions are carnivores.
+        </rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#carnivore"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#eats"/>
+                <owl:allValuesFrom rdf:resource="#herbivore"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+    <!-- Tasty Plant -->
+    <owl:Class rdf:ID="tasty_plant">
+        <rdfs:comment>
+            Tasty plants are eaten by herbivores and carnivores.
+        </rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#plant"/>
+    </owl:Class>
+
+    <!-- Properties -->
+
+    <owl:TransitiveProperty rdf:ID="is_part_of"/>
+
+    <owl:ObjectProperty rdf:ID="eats">
+        <rdfs:domain rdf:resource="#animal"/>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:ID="eaten_by">
+        <owl:inverseOf rdf:resource="#eats"/>
+    </owl:ObjectProperty>
+
+</rdf:RDF>
